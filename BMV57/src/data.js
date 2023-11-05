@@ -12,15 +12,19 @@ const model1 = {
     label: "B",
     value: "Herz und Mund und Tat und Leben",
     display: true,
-    rules: [],
+    rules: [
+      () => {
+        if (model1.value_b.required) {
+          return !!model1.value_b.value;
+        }
+        return true;
+      },
+    ],
     get required() {
       return model1.value_a.value === true;
     },
     get isValid() {
-      if (this.required) {
-        return !!this.value;
-      }
-      return true;
+      return this.rules.every((rule) => rule?.());
     },
     errMsg: "B的错误信息",
   },
@@ -29,15 +33,22 @@ const model1 = {
     value: 10,
     display: true,
     required: false,
-    rules: [],
+    rules: [
+      () => {
+        if (
+          !Number.isNaN(model1.value_d.value[0]) &&
+          !Number.isNaN(model1.value_d.value[1])
+        ) {
+          return (
+            model1.value_d.value[1] - model1.value_d.value[0] >=
+            model1.value_c.value
+          );
+        }
+        return true;
+      },
+    ],
     get isValid() {
-      if (
-        !Number.isNaN(model1.value_d.value[0]) &&
-        !Number.isNaN(model1.value_d.value[1])
-      ) {
-        return model1.value_d.value[1] - model1.value_d.value[0] >= this.value;
-      }
-      return true;
+      return this.rules.every((rule) => rule?.());
     },
     errMsg: "C的错误信息",
   },
@@ -70,7 +81,7 @@ const model1 = {
       },
     ],
     get isValid() {
-      return this.rules.every((rule) => rule());
+      return this.rules.every((rule) => rule?.());
     },
     errMsg: "D的错误信息",
     value: [10, 20],
@@ -83,7 +94,9 @@ const model1 = {
       return model1.value_c.value > 0;
     },
     required: false,
-    isValid: true,
+    get isValid() {
+      return this.rules.every((rule) => rule?.());
+    },
     errMsg: "E的错误信息",
   },
 };
