@@ -2,16 +2,27 @@ const model1 = {
   value_a: {
     label: "A",
     value: false,
-    display: true,
-    required: false,
-    isValid: true,
+    get display() {
+      return true;
+    },
+    get required() {
+      return false;
+    },
     rules: [],
+    get isValid() {
+      return this.rules.every((rule) => rule?.());
+    },
     errMsg: "A的错误信息",
   },
   value_b: {
     label: "B",
     value: "Herz und Mund und Tat und Leben",
-    display: true,
+    get display() {
+      return true;
+    },
+    get required() {
+      return model1.value_a.value === true;
+    },
     rules: [
       () => {
         if (model1.value_b.required) {
@@ -20,9 +31,6 @@ const model1 = {
         return true;
       },
     ],
-    get required() {
-      return model1.value_a.value === true;
-    },
     get isValid() {
       return this.rules.every((rule) => rule?.());
     },
@@ -31,8 +39,12 @@ const model1 = {
   value_c: {
     label: "C",
     value: 10,
-    display: true,
-    required: false,
+    get display() {
+      return true;
+    },
+    get required() {
+      return false;
+    },
     rules: [
       () => {
         if (
@@ -54,8 +66,12 @@ const model1 = {
   },
   value_d: {
     label: "D",
-    display: true,
-    required: false,
+    get display() {
+      return true;
+    },
+    get required() {
+      return false;
+    },
     rules: [
       () => {
         if (
@@ -89,6 +105,12 @@ const model1 = {
   value_e: {
     label: "E",
     value: "我是一段描述",
+    get display() {
+      return model1.value_c.value > 0;
+    },
+    get required() {
+      return true;
+    },
     rules: [
       () => {
         if (model1.value_e.required) {
@@ -97,10 +119,6 @@ const model1 = {
         return true;
       },
     ],
-    get display() {
-      return model1.value_c.value > 0;
-    },
-    required: true,
     get isValid() {
       return this.rules.every((rule) => rule?.());
     },
