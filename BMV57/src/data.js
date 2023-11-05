@@ -1,52 +1,90 @@
 const model1 = {
   value_a: {
+    label: "A",
     value: false,
+    display: true,
     required: false,
     isValid: true,
+    rules: [],
     errMsg: "A的错误信息",
   },
   value_b: {
+    label: "B",
     value: "Herz und Mund und Tat und Leben",
+    display: true,
+    rules: [],
     get required() {
       return model1.value_a.value === true;
     },
-    isValid: true,
+    get isValid() {
+      if (this.required) {
+        return !!this.value;
+      }
+      return true;
+    },
     errMsg: "B的错误信息",
   },
   value_c: {
+    label: "C",
     value: 10,
+    display: true,
     required: false,
+    rules: [],
     get isValid() {
       if (
         !Number.isNaN(model1.value_d.value[0]) &&
         !Number.isNaN(model1.value_d.value[1])
       ) {
-        return (
-          model1.value_d.value[1] - model1.value_d.value[0] >=
-          model1.value_c.value
-        );
+        return model1.value_d.value[1] - model1.value_d.value[0] >= this.value;
       }
       return true;
     },
     errMsg: "C的错误信息",
   },
   value_d: {
+    label: "D",
+    display: true,
     required: false,
+    rules: [
+      () => {
+        if (
+          !Number.isNaN(model1.value_d.value[0]) &&
+          !Number.isNaN(model1.value_d.value[1]) &&
+          !Number.isNaN(model1.value_c.value)
+        ) {
+          return (
+            model1.value_d.value[1] - model1.value_d.value[0] >=
+            model1.value_c.value
+          );
+        }
+        return true;
+      },
+      () => {
+        if (model1.value_d.value[0] < 0) {
+          return false;
+        }
+        if (model1.value_d.value[1] > 30) {
+          return false;
+        }
+        return true;
+      },
+    ],
     get isValid() {
-      if (
-        !Number.isNaN(model1.value_d.value[0]) &&
-        !Number.isNaN(model1.value_d.value[1]) &&
-        !Number.isNaN(model1.value_c.value)
-      ) {
-        return (
-          model1.value_d.value[1] - model1.value_d.value[0] >=
-          model1.value_c.value
-        );
-      }
-      return true;
+      return this.rules.every((rule) => rule());
     },
     errMsg: "D的错误信息",
     value: [10, 20],
+  },
+  value_e: {
+    label: "E",
+    value: "我是一段描述",
+    rules: [],
+    get display() {
+      return model1.value_c.value > 0;
+    },
+    required: false,
+    isValid: true,
+    errMsg: "E的错误信息",
   },
 };
 
