@@ -89,11 +89,18 @@ const model1 = {
   value_e: {
     label: "E",
     value: "我是一段描述",
-    rules: [],
+    rules: [
+      () => {
+        if (model1.value_e.required) {
+          return !!model1.value_e.value;
+        }
+        return true;
+      },
+    ],
     get display() {
       return model1.value_c.value > 0;
     },
-    required: false,
+    required: true,
     get isValid() {
       return this.rules.every((rule) => rule?.());
     },

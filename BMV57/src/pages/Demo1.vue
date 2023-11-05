@@ -19,7 +19,13 @@
       :isValid="value_b.isValid"
       :errMsg="value_b.errMsg"
     >
-      <el-input size="small" v-model:value="value_b.value" type="text" />
+      <el-input
+        size="small"
+        v-model:value="value_b.value"
+        type="text"
+        @clear="on_value_b_clear"
+        clearable
+      />
     </MyFormItem>
     <MyFormItem
       v-if="value_c.display"
@@ -110,6 +116,10 @@ export default {
       } else {
         this.$message.error("invalid");
       }
+    },
+    on_value_b_clear() {
+      this.value_b.value = "";
+      this.value_e.value = "";
     },
   },
 };
