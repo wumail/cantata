@@ -2,7 +2,7 @@
   <div id="main">
     <MyFormItem
       v-if="value_a.display"
-      :label="value_a.label"
+      label="A"
       :required="value_a.required"
       :isValid="value_a.isValid"
       :errMsg="value_a.errMsg"
@@ -14,7 +14,7 @@
     </MyFormItem>
     <MyFormItem
       v-if="value_b.display"
-      :label="value_b.label"
+      label="B"
       :required="value_b.required"
       :isValid="value_b.isValid"
       :errMsg="value_b.errMsg"
@@ -29,7 +29,7 @@
     </MyFormItem>
     <MyFormItem
       v-if="value_c.display"
-      :label="value_c.label"
+      label="C"
       :required="value_c.required"
       :isValid="value_c.isValid"
       :errMsg="value_c.errMsg"
@@ -38,7 +38,7 @@
     </MyFormItem>
     <MyFormItem
       v-if="value_d.display"
-      :label="value_d.label"
+      label="D"
       :required="value_d.required"
       :isValid="value_d.isValid"
       :errMsg="value_d.errMsg"
@@ -49,7 +49,7 @@
     </MyFormItem>
     <MyFormItem
       v-if="value_e.display"
-      :label="value_e.label"
+      label="E"
       :required="value_e.required"
       :isValid="value_e.isValid"
       :errMsg="value_e.errMsg"
@@ -103,7 +103,7 @@ export default {
     },
     validateForm() {
       const keys = Object.keys(this.model);
-      const result = keys.every((key) => {
+      const valid = keys.every((key) => {
         const { display, isValid, required, value } = this.model[key];
         if (!display) {
           return true;
@@ -111,7 +111,11 @@ export default {
           return this.model[key].isValid !== false;
         }
       });
-      if (result) {
+      if (valid) {
+        if (this.value_b.value === "i_find_bug") {
+          this.$message.error("you find bug");
+          return;
+        }
         this.$message.success("valid");
       } else {
         this.$message.error("invalid");
