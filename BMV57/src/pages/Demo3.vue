@@ -84,31 +84,6 @@ export default {
     },
   },
   data() {
-    const validatorOfC = (field) => {
-      if (this.form.value_d[1] - this.form.value_d[0] >= this.form.value_c) {
-        return [true, ""];
-      } else {
-        const errMsg =
-          field === "value_c"
-            ? "C的值必须小于D两项差值的绝对值"
-            : "D两项差值的绝对值必须大于C";
-        // this.$message.error(errMsg);
-        return [false, errMsg];
-      }
-    };
-
-    const validatorOfD = (field) => {
-      if (
-        !(
-          this.form.value_d[0] >= this.dynamicMin &&
-          this.form.value_d[1] <= this.dynamicMax
-        )
-      ) {
-        return [false, `D值的区间为[${this.dynamicMin},${this.dynamicMax}`];
-      } else {
-        return validatorOfC(field);
-      }
-    };
     return {
       form: {
         value_a: null,
@@ -141,8 +116,6 @@ export default {
       },
       dynamicMin: 0,
       dynamicMax: 30,
-      validatorOfC,
-      validatorOfD,
     };
   },
   beforeMount() {
@@ -173,7 +146,30 @@ export default {
       this.form.value_b = "";
       this.form.value_e = "";
     },
-
+    validatorOfC(field) {
+      if (this.form.value_d[1] - this.form.value_d[0] >= this.form.value_c) {
+        return [true, ""];
+      } else {
+        const errMsg =
+          field === "value_c"
+            ? "C的值必须小于D两项差值的绝对值"
+            : "D两项差值的绝对值必须大于C";
+        // this.$message.error(errMsg);
+        return [false, errMsg];
+      }
+    },
+    validatorOfD(field) {
+      if (
+        !(
+          this.form.value_d[0] >= this.dynamicMin &&
+          this.form.value_d[1] <= this.dynamicMax
+        )
+      ) {
+        return [false, `D值的区间为[${this.dynamicMin},${this.dynamicMax}`];
+      } else {
+        return this.validatorOfC(field);
+      }
+    },
     executeValidator(field) {
       const rules = this.rules[field] || [];
       rules.forEach((rule) => {
