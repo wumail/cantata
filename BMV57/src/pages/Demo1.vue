@@ -23,7 +23,7 @@
         size="small"
         v-model:value="value_b.value"
         type="text"
-        @clear="on_value_b_clear"
+        @clear="onClear"
         clearable
       />
     </MyFormItem>
@@ -56,7 +56,7 @@
     >
       <el-input size="small" v-model:value="value_e.value" type="text" />
     </MyFormItem>
-    <el-button @click="validateForm">Submit</el-button>
+    <el-button @click="onSubmit">Submit</el-button>
   </div>
 </template>
 
@@ -101,7 +101,7 @@ export default {
         this[key] = val[key];
       });
     },
-    validateForm() {
+    onSubmit() {
       const keys = Object.keys(this.model);
       const valid = keys.every((key) => {
         const { display, isValid, required, value } = this.model[key];
@@ -121,7 +121,7 @@ export default {
         this.$message.error("invalid");
       }
     },
-    on_value_b_clear() {
+    onClear() {
       this.value_b.value = "";
       this.value_e.value = "";
     },

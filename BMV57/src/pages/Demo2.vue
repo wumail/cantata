@@ -12,7 +12,7 @@
         v-model:value="form.value_b"
         type="text"
         clearable
-        @clear="on_value_b_clear"
+        @clear="onClear"
       />
     </el-form-item>
     <el-form-item label="C" prop="value_c">
@@ -127,7 +127,7 @@ export default {
         }
       });
     },
-    on_value_b_clear() {
+    onClear() {
       this.form.value_b = "";
       this.form.value_e = "";
       this.$refs.ruleForm.validateField("value_b");

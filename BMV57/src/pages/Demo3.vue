@@ -21,8 +21,8 @@
         v-model:value="form.value_b"
         type="text"
         clearable
-        @clear="on_value_b_clear"
-        @change="executeValidator('value_b')"
+        @clear="onClear"
+        @change="validate('value_b')"
       />
     </MyFormItem>
     <MyFormItem
@@ -33,7 +33,7 @@
       <el-input-number
         size="small"
         v-model:value="form.value_c"
-        @change="executeValidator('value_c')"
+        @change="validate('value_c')"
       />
     </MyFormItem>
     <MyFormItem
@@ -44,13 +44,13 @@
       <el-input-number
         size="small"
         v-model:value="form.value_d[0]"
-        @change="executeValidator('value_d')"
+        @change="validate('value_d')"
       />
       <span style="margin: 0 10px">~</span>
       <el-input-number
         size="small"
         v-model:value="form.value_d[1]"
-        @change="executeValidator('value_d')"
+        @change="validate('value_d')"
       />
     </MyFormItem>
     <MyFormItem
@@ -64,7 +64,7 @@
         size="small"
         v-model:value="form.value_e"
         type="text"
-        @change="executeValidator('value_e')"
+        @change="validate('value_e')"
       />
     </MyFormItem>
     <el-button @click="onSubmit">Submit</el-button>
@@ -129,7 +129,7 @@ export default {
     onSubmit() {
       const keys = Object.keys(this.validateStatus);
       keys.forEach((key) => {
-        this.executeValidator(key);
+        this.validate(key);
       });
       this.$nextTick(() => {
         const valid = keys.every((key) => {
@@ -142,9 +142,10 @@ export default {
         }
       });
     },
-    on_value_b_clear() {
+    onClear() {
       this.form.value_b = "";
       this.form.value_e = "";
+      this.validate('value_e');
     },
     validatorOfC(field) {
       if (this.form.value_d[1] - this.form.value_d[0] >= this.form.value_c) {
@@ -170,7 +171,7 @@ export default {
         return this.validatorOfC(field);
       }
     },
-    executeValidator(field) {
+    validate(field) {
       const rules = this.rules[field] || [];
       rules.forEach((rule) => {
         let isValid = true,
